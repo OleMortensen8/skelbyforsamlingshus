@@ -1,0 +1,15 @@
+.DS_Store
+vendor/
+.env
+.vscode/launch.json
+.vscode/settings.json
+.htaccess
+composer.phar
+.htaccess
+.phpunit.result.cache
+tests/log/testdox.html
+tests/log/testdox.txt
+assets/img/
+assets/img/skelby/inspiration/thumbnails/*
+router.php
+Thunderbird_profile_backup.zip

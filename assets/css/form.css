@@ -1,0 +1,185 @@
+#centerColumn{
+    margin: 0 auto;
+    width: 100%;
+}
+form, #form1 {
+    margin: 0 auto;
+    background-color: #ffffff;
+    border: 2px solid #111111;
+    border-radius: 18px;
+    box-shadow: none;
+    padding: 1.5em;
+}
+@media screen and (min-width: 768px) {
+    form, #form1 {
+        margin: 0 auto;
+        margin-top: 35px;
+        padding: 2.5em;
+        width: 55%;
+    }
+}
+
+h2 {
+    text-align: center;
+    font-size: 28px;
+    padding: 0;
+    margin-bottom: 20px;
+    color: #111111;
+}
+
+@media screen and (min-width: 700px) {
+    .large-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .small-group {
+        width: 45%;
+    }
+}
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #111111;
+    font-weight: 700;
+}
+
+input, select {
+    padding: 12px 16px;
+    width: 100%;
+    outline: 0;
+    margin-bottom: 18px;
+    border-radius: 12px;
+    border: 1px solid #111111;
+    background-color: #ffffff;
+    color: #111111;
+    font-size: 14px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+input:focus, select:focus {
+    border-color: #000000;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+}
+
+.textarea-div {
+    width: 100%;
+}
+
+textarea {
+    padding: 10px;
+    width: 100%;
+    outline: 0;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    border: 0;
+    background-color: #ededed;
+    font-size: 14px;
+    height: 100px;
+}
+
+.btn {
+    background-color: #111111;
+    color: #ffffff;
+    padding: 14px 18px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border: 1px solid #111111;
+    border-radius: 12px;
+    transition: 0.25s all ease;
+    letter-spacing: 0.05em;
+}
+.btn:hover {
+    background-color: #ffffff;
+    color: #111111;
+    border-color: #111111;
+}
+
+/* Confirmation message styles */
+.confirmation-message {
+    text-align: center;
+    padding: 20px;
+}
+
+.confirmation-message h2,
+.confirmation-message h3 {
+    margin-bottom: 15px;
+}
+
+.account-info {
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px 0;
+    text-align: left;
+    border: 1px solid #111111;
+}
+
+.account-info p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #111111;
+}
+
+.confirmation-note {
+    font-weight: bold;
+    margin: 15px 0;
+    text-align: left;
+}
+
+/* Intro highlight for membership pages */
+.intro {
+    max-width: 760px;
+    margin: 18px auto 26px;
+    padding: 18px 20px;
+    background: #ffffff;
+    border: 2px solid #111111;
+    border-radius: 12px;
+    text-align: left;
+}
+
+.intro .lead {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #111111;
+}
+
+.intro p {
+    margin: 0 0 8px 0;
+    color: #111111;
+    line-height: 1.45;
+}
+
+/* Additional responsive adjustments */
+@media screen and (max-width: 480px) {
+    form, #form1 {
+        padding: 1em;
+    }
+
+    h1, h2 {
+        font-size: 24px;
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+
+    .large-group {
+        flex-direction: column;
+    }
+
+    .small-group {
+        width: 100%;
+    }
+
+    input, select, .btn {
+        font-size: 16px;
+        padding: 12px;
+    }
+}

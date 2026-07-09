@@ -1,0 +1,25 @@
+{
+  "name": "skelby/forsamlinghus",
+  "description": "Skelby Forsamlinghus booking system",
+  "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "App\\": "assets/class/"
+        }
+    },
+  "require-dev": {
+        "phpunit/phpunit": "^10",
+    "codedungeon/phpunit-result-printer": "^0.31.0",
+    "codeception/codeception": "^5.0",
+    "codeception/module-webdriver": "^3.2",
+    "phpunit/php-code-coverage": "^10.0"
+    },
+  "scripts": {
+    "test": "phpunit",
+    "coverage": "./generate-coverage.sh",
+    "test-xdebug": "./test-xdebug.php",
+    "post-autoload-dump": [
+        "echo 'Note: App\\\\ namespace is mapped to assets/class/ in composer.json'"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+    "recommendations": [
+        "docuwriterai.docuwriter-ai---vscode-extension",
+        "bmewburn.vscode-intelephense-client",
+        "felixbecker.php-debug",
+        "bmewburn.vscode-intelephense-client",
+        "neilbrayfield.php-docblocker",
+        "adrianwilczynski.csharp",
+        "eamodio.gitlens",
+        "ms-vscode.makefile-tools",
+        "ms-azuretools.vscode-docker",
+        "firsttris.vscode-jest-runner",
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "redhat.vscode-yaml",
+        "ms-vscode.Theme-MaterialKit"
+    ]
+}
