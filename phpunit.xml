@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" bootstrap="vendor/autoload.php" colors="true" cacheDirectory=".phpunit.cache">
+  <testsuites>
+    <testsuite name="All Tests">
+      <directory>./tests</directory>
+    </testsuite>
+    <testsuite name="Unit Tests">
+      <file>./tests/AuthTest.php</file>
+      <file>./tests/BookableCellTest.php</file>
+      <file>./tests/BookingTest.php</file>
+      <file>./tests/CalendarTest.php</file>
+      <file>./tests/CustomerTest.php</file>
+      <file>./tests/DatabaseTest.php</file>
+      <file>./tests/EventManagerTest.php</file>
+      <file>./tests/StringUtilsTest.php</file>
+      <file>./tests/UserTest.php</file>
+    </testsuite>
+    <testsuite name="Integration Tests">
+      <file>./tests/UserAuthenticationIntegrationTest.php</file>
+      <file>./tests/BookingIntegrationTest.php</file>
+      <file>./tests/EventManagementIntegrationTest.php</file>
+    </testsuite>
+    <testsuite name="Functional Tests">
+      <file>./tests/BookingWorkflowFunctionalTest.php</file>
+      <file>./tests/UserRegistrationLoginWorkflowFunctionalTest.php</file>
+      <file>./tests/ViewingEventsWorkflowFunctionalTest.php</file>
+      <file>./tests/AdminApprovingBookingsWorkflowFunctionalTest.php</file>
+    </testsuite>
+  </testsuites>
+  <source>
+    <include>
+      <directory suffix=".php">assets/class</directory>
+    </include>
+  </source>
+  <coverage>
+    <report>
+      <clover outputFile="coverage.xml"/>
+      <html outputDirectory="tests/log/report"/>
+      <text outputFile="php://stdout" showUncoveredFiles="true"/>
+    </report>
+  </coverage>
+</phpunit>
