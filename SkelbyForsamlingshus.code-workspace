@@ -4,5 +4,21 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"chat.tools.terminal.autoApprove": {
+			"md5sum": true,
+			"git rm": true,
+			"docker build": true,
+			"systemctl": true,
+			"/^sudo systemctl start docker$/": {
+				"approve": true,
+				"matchCommandLine": true
+			},
+			"docker compose": true,
+			"/^sudo docker compose up -d --build 2>&1 \\| tail -60$/": {
+				"approve": true,
+				"matchCommandLine": true
+			}
+		}
+	}
 }

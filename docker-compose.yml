@@ -7,16 +7,39 @@ services:
       - .:/var/www/html
     ports:
       - "8080:80"
+    environment:
+      # Overrides the values normally loaded from .env so local testing never
+      # touches the real production database or mail account. phpdotenv's
+      # Immutable loader will not overwrite variables that already exist in
+      # the environment, so these take precedence over .env.
+      HOST: db
+      DATABASE: skelby_dev
+      USERNAME: skelby
+      PASSWORD: skelby_dev_pass
+      ENVIRONMENT: development
+      MAIL_HOST: localhost
+      MAIL_PORT: 1025
+      MAIL_USERNAME: test
+      MAIL_PASSWORD: test
+      MAIL_FROM: test@localhost
+      MAIL_FROM_NAME: "Skelby Dev"
+      ADMIN_EMAIL: test@localhost
+    depends_on:
+      - db
 
   db:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: myapp
+      MYSQL_DATABASE: skelby_dev
+      MYSQL_USER: skelby
+      MYSQL_PASSWORD: skelby_dev_pass
     ports:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+      - ./assets/sql/create_users_table.sql:/docker-entrypoint-initdb.d/00_create_users_table.sql:ro
+      - ./docker/initdb/01_customers_bookings.sql:/docker-entrypoint-initdb.d/01_customers_bookings.sql:ro
 
 volumes:
   db_data:
