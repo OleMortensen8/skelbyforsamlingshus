@@ -8,16 +8,19 @@
                 <div class="board-member">
                     <h3>BestyrelsesFormand</h3>
                     <p>Per Skov Mortensen</p>
+                    <p>formand@skelby-forsamlingshus.dk</p>
                 </div>
 
                 <div class="board-member">
                     <h3>Næstformand</h3>
-                    <p>Gina Helvig</p>
+                    <p></p>
                 </div>
 
                 <div class="board-member">
                     <h3>Kasserer</h3>
-                    <p>Linda Gohs</p>
+                    <p>Jesper West Hansen</p>
+                    <p>&#x32;&#x30;&#x20;&#x38;&#x33;&#x20;&#x35;&#x36;&#x20;&#x34;&#x37;</p>
+                    <p>&#x6b;&#x61;&#x73;&#x73;&#x65;&#x72;&#x65;&#x72;&#x40;&#x73;&#x6b;&#x65;&#x6c;&#x62;&#x79;&#x66;&#x6f;&#x72;&#x73;&#x61;&#x6d;&#x6c;&#x69;&#x6e;&#x67;&#x73;&#x68;&#x75;&#x73;&#x2e;&#x64;&#x6b;</p>
                 </div>
 
                 <div class="board-member">
