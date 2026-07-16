@@ -1,0 +1,21 @@
+{
+  "name": "My Server",
+  "host": "linux318.unoeuro.com",
+  "protocol": "ftp",
+  "port": 21,
+  "username": "skelby-forsamli.dk",
+  "password": "tba56pkxy3",
+  "remotePath": "/public_html/",
+  "uploadOnSave": true,
+  "useTempFile": false,
+  "openSsh": false,
+  "watcher": {
+    "files": "**/*",
+    "autoUpload": true,
+    "autoDelete": false,
+    "ignoreCreate": false,
+    "ignoreUpdate": false,
+    "ignoreDelete": true
+  },
+  "ignore": []
+}
