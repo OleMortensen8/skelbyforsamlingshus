@@ -1,7 +1,4 @@
 <?php
-// Set security headers
-include "assets/config/security_headers.php";
-
 // Include autoloaders
 require_once "vendor/autoload.php";
 
@@ -22,11 +19,14 @@ spl_autoload_register(function ($class) {
 
 use App\EventManager;
 
-// Load environment variables
+// Load environment variables (before security headers, so CSP can reference them)
 if (file_exists(__DIR__ . '/.env')) {
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
     $dotenv->load();
 }
+
+// Set security headers
+include "assets/config/security_headers.php";
 
 libxml_use_internal_errors(true);
 
