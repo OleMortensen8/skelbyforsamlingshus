@@ -1,4 +1,5 @@
 <?php
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -15,9 +16,9 @@ try {
     $mail->CharSet = 'UTF-8';
     $mail->isHTML(true);
     $mail->setFrom(getenv('MAIL_FROM') ?: 'ue334094@skelby-forsamlingshus.dk', getenv('MAIL_FROM_NAME') ?: 'Skelby Forsamlinghus');
-    $mail->addAddress(getenv('ADMIN_EMAIL') ?: 'g.helvig65@gmail.com', 'Bestyrelsesformand');
-    $mail->addBCC('mette@fiskebaek.com');
-    $mail->addBCC('olevsmortensen@dbc5radio.dk');
+    $mail->addAddress(getenv('ADMIN_EMAIL'), 'Administrator');
+    $mail->addBCC('mette@fiskebaek.com', 'Sekrætær');
+    $mail->addBCC('dev@dbc5radio.dk', 'Tech');
     $mail->Subject = "Oplysninger for henvendelse til udlejning";
 
     $domain = getenv('APP_DOMAIN') ?: 'skelby-forsamlingshus.dk';
