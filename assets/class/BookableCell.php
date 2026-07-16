@@ -1,14 +1,19 @@
 <?php
+
 namespace App;
+
 class BookableCell
 {
     private $booking;
 
     private $currentURL;
-     public function __construct(Booking $booking)
+
+    private $capCaptcha;
+    public function __construct(Booking $booking)
     {
         $this->booking = $booking;
         $this->currentURL = htmlentities($_SERVER['REQUEST_URI']);
+        $this->capCaptcha = new CapCaptcha();
 
         // Include secure session configuration
         require_once __DIR__ . '/../config/session_config.php';
@@ -17,6 +22,15 @@ class BookableCell
         if (!isset($_SESSION['csrf_token'])) {
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         }
+    }
+
+    /**
+     * Get the Cap CAPTCHA widget's public API endpoint, for rendering in the form.
+     * @return string
+     */
+    public function getCapApiEndpoint()
+    {
+        return $this->capCaptcha->getApiEndpoint();
     }
 
     /**
@@ -101,18 +115,29 @@ class BookableCell
         return $idArray;
     }
 
-    public function routeActions() {
+    public function routeActions()
+    {
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             ob_start();
             header('Content-Type: application/json');
             $response = ['status' => 'error', 'message' => 'Invalid request.']; // default response
-        // Handle the AJAX request    
+            // Handle the AJAX request    
             // ====Add booking====
             if (isset($_POST['add'])) {
                 // Verify CSRF token
                 $csrfToken = isset($_POST['csrf_token']) ? $this->sanitizeString($_POST['csrf_token']) : '';
                 if (!$this->verifyCsrfToken($csrfToken)) {
                     $response = ['status' => 'error', 'message' => 'Invalid security token. Please refresh the page and try again.'];
+                    ob_end_clean();
+                    echo json_encode($response);
+                    exit;
+                }
+
+                // Verify Cap CAPTCHA token (server-side; the widget's client-side
+                // solve is not trusted on its own)
+                $capResult = $this->capCaptcha->verify($_POST['cap-token'] ?? '');
+                if (!$capResult['success']) {
+                    $response = ['status' => 'error', 'message' => $capResult['message']];
                     ob_end_clean();
                     echo json_encode($response);
                     exit;
@@ -173,11 +198,10 @@ class BookableCell
                 ob_end_clean();
                 echo $response; // Echo the JSON response
                 exit;
-            }            
-
+            }
         }
         // ====Delete booking==== 
-        if(isset($_GET['delete'])){
+        if (isset($_GET['delete'])) {
             // Validate booking IDs first
             $bookingIds = isset($_GET['ids']) ? $this->validateBookingIds($_GET['ids']) : false;
 
@@ -204,7 +228,7 @@ class BookableCell
             }
         }
 
-        if(isset($_GET['book'])){
+        if (isset($_GET['book'])) {
             // Validate booking IDs first
             $bookingIds = isset($_GET['ids']) ? $this->validateBookingIds($_GET['ids']) : false;
 
@@ -226,25 +250,24 @@ class BookableCell
             // If we get here, either the token is valid or we're allowing the action from an email link
             $this->booking->approveBooking($bookingIds);
         }
-
     }
 
     private function openCell($date)
     {
-        $today = date('Y-m-d',strtotime('now'));
-        if ($date >= $today){
-            return '<div class="open" value="'. date('Y-m-d', strtotime($date)) .'">' . date('j',strtotime($date)) . '</div>';
-        }else{
+        $today = date('Y-m-d', strtotime('now'));
+        if ($date >= $today) {
+            return '<div class="open" value="' . date('Y-m-d', strtotime($date)) . '">' . date('j', strtotime($date)) . '</div>';
+        } else {
             return '<div class="booked" style="background-color:white;">' . date('j', strtotime($date)) . '</div>';
         }
     }
 
     private function pendingCell($date)
     {
-        $today = date('Y-m-d',strtotime('now'));
+        $today = date('Y-m-d', strtotime('now'));
         if ($date >= $today) {
             return '<div class="pending">' . date('j', strtotime($date)) . '</div>';
-        }else{
+        } else {
             return '<div class="pending" style="background-color:white;">' . date('j', strtotime($date)) . '</div>';
         }
     }
@@ -252,13 +275,13 @@ class BookableCell
 
     private function isDatePending($date)
     {
-    return in_array($date, $this->pendingDates());
+        return in_array($date, $this->pendingDates());
     }
 
     private function pendingDates()
     {
         return array_map(function ($record) {
-            if($record['approved'] == false){
+            if ($record['approved'] == false) {
                 return $record['booking_date'];
             }
         }, $this->booking->index());
@@ -273,20 +296,21 @@ class BookableCell
     private function bookedDates()
     {
         return array_map(function ($record) {
-                return $record['booking_date'];
+            return $record['booking_date'];
         }, $this->booking->index());
     }
     private function bookedCell($date)
     {
-        $today = date('Y-m-d',strtotime('now'));
+        $today = date('Y-m-d', strtotime('now'));
         if ($date >= $today) {
             return '<div class="booked">' . date('j', strtotime($date)) . '</div>';
-        }else{
+        } else {
             return '<div class="booked" style="color:white;">' . date('j', strtotime($date)) . '</div>';
         }
     }
 
-    public function bookingForm() {
+    public function bookingForm()
+    {
         echo '<form id="form1" class="booking-form" method="post" action="">
             <span class="close">x</span>
                 <h2 class="form-title">Book Forsamlingshuset</h2>
@@ -357,6 +381,10 @@ class BookableCell
                 </div>
 
                 <div class="form-group">
+                    <cap-widget data-cap-api-endpoint="' . htmlspecialchars($this->getCapApiEndpoint(), ENT_QUOTES, 'UTF-8') . '" required></cap-widget>
+                </div>
+
+                <div class="form-group">
                     <input id="sub" class="submit" type="submit" value="Book" />
                 </div>
             </form>';
@@ -386,5 +414,4 @@ class BookableCell
             });
             </script>';
     }
-
 }

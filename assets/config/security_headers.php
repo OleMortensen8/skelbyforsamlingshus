@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Security Headers Configuration
  *
@@ -8,9 +9,11 @@
 
 // Enforce HTTPS in production environment
 // Skip HTTPS enforcement for localhost and development environment
-if (getenv('ENVIRONMENT') !== 'development' &&
+if (
+    getenv('ENVIRONMENT') !== 'development' &&
     !isset($_SERVER['HTTP_HOST']) ||
-    (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] !== 'localhost' && $_SERVER['HTTP_HOST'] !== 'localhost:8080')) {
+    (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] !== 'localhost' && $_SERVER['HTTP_HOST'] !== 'localhost:8080')
+) {
     if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
         // Redirect to HTTPS version of the URL
         $redirect = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -20,15 +23,25 @@ if (getenv('ENVIRONMENT') !== 'development' &&
     }
 }
 
+// The Cap CAPTCHA widget (self-hosted, served from assets/js/vendor/) fetches
+// challenges directly from the configured Cap server, so that origin needs to
+// be allowed in connect-src. It also compiles a WASM module (needs
+// 'wasm-unsafe-eval' in script-src) and runs its solver in a Web Worker
+// spawned from a blob: URL (needs worker-src, since it isn't covered by
+// script-src's blob: exemption once worker-src is unset and falls back).
+$capServerUrl = getenv('CAP_SERVER_URL') ?: '';
+$capConnectSrc = $capServerUrl !== '' ? ' ' . $capServerUrl : '';
+
 // Content Security Policy (CSP)
 // Restricts the sources of content that can be loaded on the page
 $cspDirectives = [
     "default-src" => "'self'",
-    "script-src" => "'self' 'unsafe-inline' https://ajax.googleapis.com",
+    "script-src" => "'self' 'unsafe-inline' 'wasm-unsafe-eval' https://ajax.googleapis.com",
+    "worker-src" => "'self' blob:",
     "style-src" => "'self' 'unsafe-inline' https://fonts.googleapis.com",
     "img-src" => "'self' data: https://www.openstreetmap.org https://*.tile.openstreetmap.org https://" . ($_SERVER['HTTP_HOST'] ?? 'skelby-forsamlingshus.dk'),
     "font-src" => "'self' https://fonts.gstatic.com",
-    "connect-src" => "'self' https://*.tile.openstreetmap.org",
+    "connect-src" => "'self' https://*.tile.openstreetmap.org" . $capConnectSrc,
     "frame-src" => "'self' https://www.openstreetmap.org https://sway.office.com https://sway.cloud.microsoft",
     "object-src" => "'none'",
     "base-uri" => "'self'",
@@ -37,9 +50,11 @@ $cspDirectives = [
 ];
 
 // Only add upgrade-insecure-requests in production environments
-if (getenv('ENVIRONMENT') !== 'development' &&
+if (
+    getenv('ENVIRONMENT') !== 'development' &&
     !isset($_SERVER['HTTP_HOST']) ||
-    (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] !== 'localhost' && $_SERVER['HTTP_HOST'] !== 'localhost:8080')) {
+    (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] !== 'localhost' && $_SERVER['HTTP_HOST'] !== 'localhost:8080')
+) {
     $cspDirectives["upgrade-insecure-requests"] = "";
 }
 
@@ -79,9 +94,11 @@ header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
 // Strict-Transport-Security (HSTS)
 // Forces browsers to use HTTPS for the specified domain
 // Only set HSTS in production environments
-if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' &&
+if (
+    isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' &&
     (getenv('ENVIRONMENT') !== 'development' &&
         (!isset($_SERVER['HTTP_HOST']) ||
-            (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] !== 'localhost' && $_SERVER['HTTP_HOST'] !== 'localhost:8080')))) {
+            (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] !== 'localhost' && $_SERVER['HTTP_HOST'] !== 'localhost:8080')))
+) {
     header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 }
