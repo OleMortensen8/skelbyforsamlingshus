@@ -29,7 +29,7 @@ include "./assets/view/header.php";
                 <li>Depositum - 50% af lejen.</li>
                 <li>Hele huset - 2000 kr. - Max 150 personer.</li>
                 <li>Små Sale - 1000 kr. - Max 30 personer</li>
-                <li>El - 5 kr/Kw/timen</li>
+                <li>El - 5 kr Pr. Kw/timen</li>
                 <li>Rengøring - 600 kr.</li>
             </ul>
         </div>
