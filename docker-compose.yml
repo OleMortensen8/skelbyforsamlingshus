@@ -24,9 +24,9 @@ services:
       MAIL_FROM: test@localhost
       MAIL_FROM_NAME: "Skelby Dev"
       ADMIN_EMAIL: test@localhost
-      CAP_SITE_KEY: "885eb43e87"
-      CAP_SERVER_URL: "http://192.168.1.143:3000"
-      CAP_API_ENDPOINT: "http://192.168.1.143:3000/885eb43e87/"
+      CAP_SITE_KEY: "${CAP_SITE_KEY:-885eb43e87}"
+      CAP_SERVER_URL: "${CAP_SERVER_URL:-http://192.168.1.143:3000}"
+      CAP_API_ENDPOINT: "${CAP_API_ENDPOINT:-http://192.168.1.143:3000/885eb43e87/}"
       # Set the real secret key from the Cap dashboard, e.g. via an .env file
       # or `docker compose run -e CAP_SECRET_KEY=...`. Left blank here on purpose.
       CAP_SECRET_KEY: "${CAP_SECRET_KEY:-}"
