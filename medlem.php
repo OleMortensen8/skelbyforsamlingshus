@@ -1,6 +1,8 @@
 <?php
 require_once 'bootstrap.php';
 
+use App\CapCaptcha;
+
 $name = htmlspecialchars($_POST['name'] ?? '', ENT_QUOTES, 'UTF-8');
 $lastname = htmlspecialchars($_POST['lastname'] ?? '', ENT_QUOTES, 'UTF-8');
 $email = filter_var($_POST['mail'] ?? '', FILTER_SANITIZE_EMAIL);
@@ -37,6 +39,12 @@ if (empty($postalCode)) {
 
 if (empty($town)) {
     $errors[] = 'Town is required.';
+}
+
+$capCaptcha = new CapCaptcha();
+$capResult = $capCaptcha->verify($_POST['cap-token'] ?? '');
+if (!$capResult['success']) {
+    $errors[] = $capResult['message'];
 }
 
 if (!empty($errors)) {
