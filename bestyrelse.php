@@ -14,24 +14,27 @@
 
                 <div class="board-member">
                     <h3>Næstformand</h3>
-                    <p></p>
+                    <p>Henrik Vest Hansen</p>
+                    <p>&#x6e;&#x61;&#x65;&#x73;&#x74;&#x66;&#x6f;&#x72;&#x6d;&#x61;&#x6e;&#x64;&#x40;&#x73;&#x6b;&#x65;&#x6c;&#x62;&#x79;&#x2d;&#x66;&#x6f;&#x72;&#x73;&#x61;&#x6d;&#x6c;&#x69;&#x6e;&#x67;&#x73;&#x68;&#x75;&#x73;&#x2e;&#x64;&#x6b;</p>
                 </div>
 
                 <div class="board-member">
                     <h3>Kasserer</h3>
                     <p>Jesper West Hansen</p>
-                    <p>&#x2b;&#x34;&#x35;&#x20;&#x32;&#x30;&#x20;&#x38;&#x33;&#x20;&#x35;&#x36;&#x20;&#x34;&#x37;</p>
                     <p>&#x6b;&#x61;&#x73;&#x73;&#x65;&#x72;&#x65;&#x72;&#x40;&#x73;&#x6b;&#x65;&#x6c;&#x62;&#x79;&#x66;&#x6f;&#x72;&#x73;&#x61;&#x6d;&#x6c;&#x69;&#x6e;&#x67;&#x73;&#x68;&#x75;&#x73;&#x2e;&#x64;&#x6b;</p>
+                    <p>&#x2b;&#x34;&#x35;&#x20;&#x32;&#x30;&#x20;&#x38;&#x33;&#x20;&#x35;&#x36;&#x20;&#x34;&#x37;</p>
                 </div>
 
                 <div class="board-member">
                     <h3>Sekretær</h3>
                     <p>Mette Vølund Mortensen</p>
+                    <p>&#x73;&#x65;&#x6b;&#x72;&#x65;&#x74;&#x61;&#x65;&#x72;&#x40;&#x73;&#x6b;&#x65;&#x6c;&#x62;&#x79;&#x2d;&#x66;&#x6f;&#x72;&#x73;&#x61;&#x6d;&#x6c;&#x69;&#x6e;&#x67;&#x73;&#x68;&#x75;&#x73;&#x2e;&#x64;&#x6b;</p>
+                    <p>&#x2b;&#x34;&#x35;&#x32;&#x37;&#x36;&#x32;&#x38;&#x30;&#x35;&#x35;</p>
                 </div>
 
                 <div class="board-member">
                     <h3>Bestyelsesmedlem</h3>
-                    <p>Carsten</p>
+                    <p>Carsten Andersen</p>
                 </div>
 
                 <div class="board-member">
@@ -42,6 +45,7 @@
                 <div class="board-member">
                     <h3>2. supleant</h3>
                     <p>Ole V. S. Mortensen</p>
+                    <p>&#x74;&#x65;&#x63;&#x68;&#x40;&#x73;&#x6b;&#x65;&#x6c;&#x62;&#x79;&#x2d;&#x66;&#x6f;&#x72;&#x73;&#x61;&#x6d;&#x6c;&#x69;&#x6e;&#x67;&#x73;&#x68;&#x75;&#x73;&#x2e;&#x64;&#x6b;</p>
                 </div>
             </div>
         </div>
