@@ -15,11 +15,15 @@ try {
     $mail2->CharSet = 'UTF-8';
     $mail2->isHTML(true);
     $mail2->setFrom(getenv('MAIL_FROM') ?: 'ue334094@skelby-forsamlingshus.dk', 'Forsamlingshuset');
+    $mail2->addReplyTo(getenv('MAIL_REPLY_TO') ?: 'kasserer@skelby-forsamlingshus.dk', 'Kasserer');
 
     if (!empty($email)) {
         $mail2->addAddress(htmlspecialchars($email), htmlspecialchars($name ?? 'Guest'));
     }
-    $mail2->addBCC('olevsmortensen@dbc5radio.dk');
+    $bccDev = getenv('MAIL_BCC_DEV') ?: '';
+    if ($bccDev !== '') {
+        $mail2->addBCC($bccDev);
+    }
     $mail2->Subject = "Oplysninger for henvendelse til udlejning";
     $mail2->Body = 'Efterspurgt BookingDate: ' . htmlspecialchars($pendingDay[0] ?? '') . ' og ' . htmlspecialchars($pendingDay[1] ?? '') . ' dage frem<br/>' .
         'Kære ' . htmlspecialchars($name ?? '') . '<br/><br/>' .

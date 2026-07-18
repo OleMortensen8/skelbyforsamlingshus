@@ -16,14 +16,18 @@ $mail3->Host       = 'websmtp.simply.com';                  // Set the SMTP serv
 $mail3->SMTPAuth   = true;                                   // Enable SMTP authentication
 $mail3->Username   = 'ue334094@skelby-forsamlingshus.dk';                                      // SMTP username
 $mail3->Password   = '***REMOVED-LEAKED-SMTP-PASSWORD***';                                     // SMTP password
-$mail3->SMTPSecure = `PHPMailer::ENCRYPTION_STARTTLS`;       // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+$mail3->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;       // Enable TLS encryption; PHPMailer::ENCRYPTION_SMTPS also accepted
 $mail3->Port       = 587;
 $mail3->CharSet = 'UTF-8';
 $mail3->isHTML(true);
 //Set who the message is to be sent from
 $mail3->setFrom('ue334094@skelby-forsamlingshus.dk', 'Forsamlingshuset');
+$mail3->addReplyTo(getenv('MAIL_REPLY_TO') ?: 'kasserer@skelby-forsamlingshus.dk', 'Kasserer');
 $mail3->addAddress($mailer, 'Gæst');
-$mail3->addBCC('olevsmortensen@dbc5radio.dk');
+$bccDev = getenv('MAIL_BCC_DEV') ?: '';
+if ($bccDev !== '') {
+    $mail3->addBCC($bccDev);
+}
 $mail3->Subject = "Anullering  af Bestilling";
 $mail3->Body = 'Kære '. $name . 
 '<br/> Vi har bekræftet din booking til ' . $dato . 'er anulleret af vores reræsentant.<br/>' .

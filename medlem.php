@@ -71,9 +71,17 @@ $mail->Port = (int)$_ENV['MAIL_PORT'];
 $mail->CharSet = 'UTF-8';
 $mail->isHTML(true);
 $mail->setFrom($_ENV['MAIL_FROM'], $_ENV['MAIL_FROM_NAME']);
+$mail->addReplyTo($_ENV['MAIL_REPLY_TO'] ?? 'kasserer@skelby-forsamlingshus.dk', 'Kasserer');
 $mail->addAddress($_ENV['ADMIN_EMAIL'], 'Bestyrelsesformand');
-$mail->addBCC('mette@fiskebaek.com');
-$mail->addBCC('olevsmortensen@dbc5radio.dk');
+
+$bccSecretary = $_ENV['MAIL_BCC_SECRETARY'] ?? 'mette@fiskebaek.com';
+if ($bccSecretary !== '') {
+    $mail->addBCC($bccSecretary);
+}
+$bccDev = $_ENV['MAIL_BCC_DEV'] ?? '';
+if ($bccDev !== '') {
+    $mail->addBCC($bccDev);
+}
 $mail->Subject = "Oplysninger til Medlemsskab";
 $mail->Body = '';
 $mail->Body .= '<br/>Nye medlems Navn: ' . $fullName;
