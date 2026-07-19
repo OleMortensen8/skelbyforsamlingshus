@@ -5,22 +5,34 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 try {
+    $mailHost = getenv('MAIL_HOST');
+    $mailUsername = getenv('MAIL_USERNAME');
+    $mailPassword = getenv('MAIL_PASSWORD');
+    $mailFrom = getenv('MAIL_FROM');
+
+    if (!$mailHost || !$mailUsername || !$mailPassword || !$mailFrom) {
+        throw new \RuntimeException('Missing required mail configuration environment variable(s) (MAIL_HOST/MAIL_USERNAME/MAIL_PASSWORD/MAIL_FROM); booking confirmation email not sent.');
+    }
+
+    if (empty($email)) {
+        // No customer email address was provided; nothing to send.
+        return;
+    }
+
     $mail2 = new PHPMailer(true);
     $mail2->isSMTP();
-    $mail2->Host = getenv('MAIL_HOST') ?: 'websmtp.simply.com';
+    $mail2->Host = $mailHost;
     $mail2->SMTPAuth = true;
-    $mail2->Username = getenv('MAIL_USERNAME') ?: 'ue334094@skelby-forsamlingshus.dk';
-    $mail2->Password = getenv('MAIL_PASSWORD') ?: '***REMOVED-LEAKED-SMTP-PASSWORD***';
+    $mail2->Username = $mailUsername;
+    $mail2->Password = $mailPassword;
     $mail2->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail2->Port = (int)(getenv('MAIL_PORT') ?: '587');
+    $mail2->Port = (int)(getenv('MAIL_PORT') ?: 587);
     $mail2->CharSet = 'UTF-8';
     $mail2->isHTML(true);
-    $mail2->setFrom(getenv('MAIL_FROM') ?: 'ue334094@skelby-forsamlingshus.dk', 'Forsamlingshuset');
+    $mail2->setFrom($mailFrom, 'Forsamlingshuset');
     $mail2->addReplyTo(getenv('MAIL_REPLY_TO') ?: 'kasserer@skelby-forsamlingshus.dk', 'Kasserer');
+    $mail2->addAddress($email, htmlspecialchars($name ?? 'Guest'));
 
-    if (!empty($email)) {
-        $mail2->addAddress(htmlspecialchars($email), htmlspecialchars($name ?? 'Guest'));
-    }
     $bccDev = getenv('MAIL_BCC_DEV') ?: '';
     if ($bccDev !== '') {
         $mail2->addBCC($bccDev);
@@ -32,9 +44,7 @@ try {
         'Vi kontakter dig inden for 5 dage omkring betalingen af huset og andre aftaler I forbindelse med overtagelesen.<br/>' .
         'M.v.h. fra Skelby forsamlingshus på Falster';
 
-    if (!$mail2->send()) {
-        error_log('PHPMailer 2 Error: ' . $mail2->ErrorInfo);
-    }
+    $mail2->send();
 } catch (\Throwable $e) {
     error_log('PHPMailer 2 Exception: ' . $e->getMessage());
 }

@@ -21,7 +21,7 @@ This report details the critical security vulnerabilities found in the PHP codeb
 ```php
 // BEFORE: Sensitive credentials hardcoded in source code
 $mail->Username = 'ue334094@skelby-forsamlingshus.dk';
-$mail->Password = '***REMOVED-LEAKED-SMTP-PASSWORD***';
+$mail->Password = '[REDACTED - was a real SMTP password, now rotated]';
 $mail->Host = 'websmtp.simply.com';
 ```
 
@@ -40,7 +40,7 @@ Updated `.env` file to store all sensitive credentials:
 ```env
 MAIL_HOST="websmtp.simply.com"
 MAIL_USERNAME="ue334094@skelby-forsamlingshus.dk"
-MAIL_PASSWORD="***REMOVED-LEAKED-SMTP-PASSWORD***"
+MAIL_PASSWORD="[REDACTED]"
 MAIL_PORT="587"
 MAIL_FROM="ue334094@skelby-forsamlingshus.dk"
 MAIL_FROM_NAME="Skelby Forsamlinghus"
@@ -522,7 +522,7 @@ To verify the fixes:
 
 2. **No Hardcoded Credentials:**
    ```bash
-   grep -r "***REMOVED-LEAKED-SMTP-PASSWORD-FRAGMENT***" --include="*.php" | grep -v ".env"
+   grep -r "MAIL_PASSWORD\s*=\s*['\"]" --include="*.php" | grep -v "getenv\|\$_ENV"
    ```
    Should return no results
 

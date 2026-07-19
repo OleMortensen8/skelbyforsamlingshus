@@ -5,19 +5,29 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 try {
-    $mail = new PHPMailer;
+    $mailHost = getenv('MAIL_HOST');
+    $mailUsername = getenv('MAIL_USERNAME');
+    $mailPassword = getenv('MAIL_PASSWORD');
+    $mailFrom = getenv('MAIL_FROM');
+    $adminEmail = getenv('ADMIN_EMAIL');
+
+    if (!$mailHost || !$mailUsername || !$mailPassword || !$mailFrom || !$adminEmail) {
+        throw new \RuntimeException('Missing required mail configuration environment variable(s) (MAIL_HOST/MAIL_USERNAME/MAIL_PASSWORD/MAIL_FROM/ADMIN_EMAIL); booking notification email not sent.');
+    }
+
+    $mail = new PHPMailer(true);
     $mail->isSMTP();
-    $mail->Host = getenv('MAIL_HOST') ?: 'websmtp.simply.com';
+    $mail->Host = $mailHost;
     $mail->SMTPAuth = true;
-    $mail->Username = getenv('MAIL_USERNAME') ?: 'ue334094@skelby-forsamlingshus.dk';
-    $mail->Password = getenv('MAIL_PASSWORD') ?: '***REMOVED-LEAKED-SMTP-PASSWORD***';
+    $mail->Username = $mailUsername;
+    $mail->Password = $mailPassword;
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = (int)(getenv('MAIL_PORT') ?: '587');
+    $mail->Port = (int)(getenv('MAIL_PORT') ?: 587);
     $mail->CharSet = 'UTF-8';
     $mail->isHTML(true);
-    $mail->setFrom(getenv('MAIL_FROM') ?: 'ue334094@skelby-forsamlingshus.dk', getenv('MAIL_FROM_NAME') ?: 'Skelby Forsamlinghus');
+    $mail->setFrom($mailFrom, getenv('MAIL_FROM_NAME') ?: 'Skelby Forsamlinghus');
     $mail->addReplyTo(getenv('MAIL_REPLY_TO') ?: 'kasserer@skelby-forsamlingshus.dk', 'Kasserer');
-    $mail->addAddress(getenv('ADMIN_EMAIL'), 'Administrator');
+    $mail->addAddress($adminEmail, 'Administrator');
 
     $bccSecretary = getenv('MAIL_BCC_SECRETARY') ?: 'mette@fiskebaek.com';
     if ($bccSecretary !== '') {
@@ -38,9 +48,7 @@ try {
     $mail->Body .= '<br/><a href="https://' . htmlspecialchars($domain) . '/udlejning?book&ids=' . htmlspecialchars($ids) . '">Godkend Booking</a>';
     $mail->Body .= '<br/><a href="https://' . htmlspecialchars($domain) . '/udlejning?delete&ids=' . htmlspecialchars($ids) . '">Slet/Annullere Booking</a>';
 
-    if (!$mail->send()) {
-        error_log('PHPMailer Error: ' . $mail->ErrorInfo);
-    }
+    $mail->send();
 } catch (\Throwable $e) {
     error_log('PHPMailer Exception: ' . $e->getMessage());
 }
