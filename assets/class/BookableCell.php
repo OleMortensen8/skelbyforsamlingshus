@@ -189,11 +189,18 @@ class BookableCell
                 // Decode the response
                 $decodedResponse = json_decode($response, true);
                 if ($decodedResponse['status'] === 'success') {
-                    // Use PHPMailer to send email with booking IDs
+                    // Use PHPMailer to send email with booking IDs.
+                    // The booking is already committed to the database at this point,
+                    // so any failure while sending the notification emails must never
+                    // prevent the success response from reaching the browser.
                     $bookingIds = $decodedResponse['bookingIds'];
-                    include('phpmailer.php');
-                    include('phpmailer_2.php');
-                    // You might need to modify phpmailer.php to handle the bookingIds array
+                    try {
+                        include('phpmailer.php');
+                        include('phpmailer_2.php');
+                        // You might need to modify phpmailer.php to handle the bookingIds array
+                    } catch (\Throwable $mailError) {
+                        error_log('Booking confirmation email failed: ' . $mailError->getMessage());
+                    }
                 }
                 ob_end_clean();
                 echo $response; // Echo the JSON response

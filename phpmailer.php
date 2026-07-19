@@ -41,6 +41,6 @@ try {
     if (!$mail->send()) {
         error_log('PHPMailer Error: ' . $mail->ErrorInfo);
     }
-} catch (Exception $e) {
+} catch (\Throwable $e) {
     error_log('PHPMailer Exception: ' . $e->getMessage());
 }

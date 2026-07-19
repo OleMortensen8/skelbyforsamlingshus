@@ -35,6 +35,6 @@ try {
     if (!$mail2->send()) {
         error_log('PHPMailer 2 Error: ' . $mail2->ErrorInfo);
     }
-} catch (Exception $e) {
+} catch (\Throwable $e) {
     error_log('PHPMailer 2 Exception: ' . $e->getMessage());
 }
