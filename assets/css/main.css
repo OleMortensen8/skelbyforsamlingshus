@@ -6,6 +6,43 @@
     src: url("../fonts/FetteClassicUNZFraktur.ttf") format("truetype");
 }
 
+/* Self-hosted Google Fonts (vendored locally instead of loading from
+   fonts.googleapis.com, to avoid a render-blocking third-party request and
+   the GDPR/privacy implications of EU visitors' browsers contacting Google
+   servers on every page load). Only the latin subset + weights actually
+   used in this stylesheet (400/700, no italics) are included. */
+@font-face {
+    font-family: "Playfair Display";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../fonts/playfair-display-v40-latin-400.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Playfair Display";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("../fonts/playfair-display-v40-latin-700.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../fonts/roboto-v51-latin-400.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("../fonts/roboto-v51-latin-700.woff2") format("woff2");
+}
+
 /* ---------------------------------
    GLOBAL + RESET
 ------------------------------------ */
