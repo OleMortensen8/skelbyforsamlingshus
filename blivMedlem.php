@@ -4,6 +4,8 @@ require_once "bootstrap.php";
 use App\CapCaptcha;
 
 $capCaptcha = new CapCaptcha();
+$pageTitle = "Bliv Medlem";
+$pageDescription = "Bliv medlem af Skelby Forsamlingshus.";
 include "assets/view/header.php";
 ?>
 <link rel="stylesheet" href="assets/css/form.css" />

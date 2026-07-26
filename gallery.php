@@ -1,4 +1,8 @@
-<?php include "assets/view/header.php"; ?>
+<?php
+$pageTitle = "Galleri";
+$pageDescription = "Se billeder fra Skelby Forsamlingshus - arrangementer, indretning og historiske billeder.";
+include "assets/view/header.php";
+?>
 <?php if (!isset($_GET['group'])) { ?>
     <style>
         /* Base styles for the gallery grid */
@@ -19,9 +23,11 @@
         /* Styles for the front page images */
         .img-front {
             width: 100%;
-            height: 500px; /* Fixed height for all images */
+            height: 500px;
+            /* Fixed height for all images */
             max-width: 100%;
-            object-fit: cover; /* Maintain aspect ratio while filling the container */
+            object-fit: cover;
+            /* Maintain aspect ratio while filling the container */
             transition: transform 0.3s ease;
         }
 
@@ -37,7 +43,8 @@
 
             /* Adjust image height for smaller screens */
             .img-front {
-                height: 200px; /* Smaller height for mobile devices */
+                height: 200px;
+                /* Smaller height for mobile devices */
             }
         }
     </style>
@@ -57,7 +64,7 @@
             </a>
         </div>
     </div>
-<?php }else{
+<?php } else {
     $allowedGroups = ['inspiration', 'gamlebilleder'];
     $group = $_GET['group'] ?? null;
 
@@ -67,60 +74,60 @@
     }
 
     $files = iterator_to_array(new RecursiveDirectoryIterator('assets/img/skelby/' . $group, FilesystemIterator::SKIP_DOTS | FilesystemIterator::UNIX_PATHS), true);
-    ?>
+?>
     <div id="gallery-selection" <?php if (empty($files)) {
-        echo "style='display:grid;grid-template-columns:1fr';";
-    } ?> >
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" type="text/javascript"></script>
+                                    echo "style='display:grid;grid-template-columns:1fr';";
+                                } ?>>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" type="text/javascript"></script>
 
-<link href="https://cdn.jsdelivr.net/npm/nanogallery2@3/dist/css/nanogallery2.min.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript"
+        <link href="https://cdn.jsdelivr.net/npm/nanogallery2@3/dist/css/nanogallery2.min.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript"
             src="https://cdn.jsdelivr.net/npm/nanogallery2@3/dist/jquery.nanogallery2.min.js"></script>
-    <?php
-    ksort($files);
-    natsort($files);
-    if (empty($files)) {
-        echo "<h1 style='margin: 0 auto; padding-top:180px;'>Billederne Kommer Snareligst</h1>";
-    }
-
-    foreach ($files as $file) {
-        // Skip directories to ensure only files are processed
-        if ($file->isDir()) {
-            continue;
+        <?php
+        ksort($files);
+        natsort($files);
+        if (empty($files)) {
+            echo "<h1 style='margin: 0 auto; padding-top:180px;'>Billederne Kommer Snareligst</h1>";
         }
 
+        foreach ($files as $file) {
+            // Skip directories to ensure only files are processed
+            if ($file->isDir()) {
+                continue;
+            }
 
-        // Original file path
-        $originalPath = $file->getPathname();
 
-        // Directory where thumbnails are stored, relative to the original file's directory or an absolute path
-        $thumbnailDir = "assets/img/skelby/" . $_GET['group'] . "/thumbnails";
+            // Original file path
+            $originalPath = $file->getPathname();
 
-        // Extract the filename from the original path
-        $filename = basename($originalPath);
+            // Directory where thumbnails are stored, relative to the original file's directory or an absolute path
+            $thumbnailDir = "assets/img/skelby/" . $_GET['group'] . "/thumbnails";
 
-        // Remove the 'original_' prefix from the filename (if present) and prepend with 'thumbnail_'
-        $thumbnailFilename = 'thumbnail_' . $filename;
+            // Extract the filename from the original path
+            $filename = basename($originalPath);
 
-        // Construct the full path to the thumbnail
-        $thumbnailPath = $thumbnailDir . '/' . $thumbnailFilename;
+            // Remove the 'original_' prefix from the filename (if present) and prepend with 'thumbnail_'
+            $thumbnailFilename = 'thumbnail_' . $filename;
 
-        // Ensure paths are web-friendly by removing any leading directory separators and using relative paths
-        $webThumbnailPath = $thumbnailPath;
-        $webOriginalPath = 'assets/img/skelby/' . $_GET['group'] . '/' . $filename;
+            // Construct the full path to the thumbnail
+            $thumbnailPath = $thumbnailDir . '/' . $thumbnailFilename;
 
-        // Note: You might need to adjust the path transformation logic based on your actual file structure and naming conventions
-        echo "<img class='img' src='" . $webThumbnailPath . "' data-ngsrc='" . $webOriginalPath . "' data-nanogallery2-lightbox alt='ForsamlingsHuset i Skelby'>";
-    }
+            // Ensure paths are web-friendly by removing any leading directory separators and using relative paths
+            $webThumbnailPath = $thumbnailPath;
+            $webOriginalPath = 'assets/img/skelby/' . $_GET['group'] . '/' . $filename;
+
+            // Note: You might need to adjust the path transformation logic based on your actual file structure and naming conventions
+            echo "<img class='img' loading='lazy' src='" . $webThumbnailPath . "' data-ngsrc='" . $webOriginalPath . "' data-nanogallery2-lightbox alt='ForsamlingsHuset i Skelby'>";
+        }
+        ?>
+
+    <?php }
     ?>
-
-<?php }
-?>
     <script>
         // Function to update image height based on width
         function updateImageHeight() {
             var gridItems = document.querySelectorAll('.img');
-            gridItems.forEach(function (item) {
+            gridItems.forEach(function(item) {
                 var computedStyle = getComputedStyle(item);
                 var width = parseFloat(computedStyle.width); // Get computed width as a number
                 item.style.height = (width * 3 / 4) + 'px'; // Aspect ratio of 4:3
@@ -139,4 +146,4 @@
         // such as font size changes or content changes, and trigger updateHeight() accordingly.
     </script>
     </div>
-<?php include "assets/view/footer.php"; ?>
+    <?php include "assets/view/footer.php"; ?>

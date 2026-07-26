@@ -9,14 +9,16 @@ $booking = new Booking();
 
 $bookableCell = new BookableCell($booking);
 $bookableCell->routeActions();
+$pageTitle = "Udlejning";
+$pageDescription = "Lej lokaler i Skelby Forsamlingshus - se priser og book online.";
 include "./assets/view/header.php";
 ?>
 <main>
     <div id="centerColumn">
         <div style="position:absolute;z-index:-1;left:0; width:100%;max-width:100%; display:flex;flex-direction:row;justify-content:space-between;">
-            <img class="banner" anonymous src="assets/img/signal-2018-09-23-143513.jpg">
-            <img class="banner" src="assets/img/signal-2018-09-23-143531.jpg">
-            <img class="banner" src="assets/img/signal-2018-09-23-143624.jpg">
+            <img class="banner" anonymous alt="" src="assets/img/signal-2018-09-23-143513.jpg">
+            <img class="banner" alt="" src="assets/img/signal-2018-09-23-143531.jpg">
+            <img class="banner" alt="" src="assets/img/signal-2018-09-23-143624.jpg">
         </div>
 
         <div class="pricing-info">

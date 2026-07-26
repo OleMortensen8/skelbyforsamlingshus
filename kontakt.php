@@ -1,4 +1,8 @@
-<?php include "assets/view/header.php"; ?>
+<?php
+$pageTitle = "Kontakt";
+$pageDescription = "Kontaktoplysninger til Skelby Forsamlingshus - udlejning, regnskab og andre henvendelser.";
+include "assets/view/header.php";
+?>
 <main>
     <div id="centerColumn">
         <div class="contact-container">

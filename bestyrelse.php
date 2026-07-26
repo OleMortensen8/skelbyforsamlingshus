@@ -1,4 +1,8 @@
-<?php include "assets/view/header.php"; ?>
+<?php
+$pageTitle = "Bestyrelse";
+$pageDescription = "Mød bestyrelsen bag Skelby Forsamlingshus.";
+include "assets/view/header.php";
+?>
 <main>
     <div id="centerColumn">
         <div class="board-container">

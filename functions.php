@@ -1,5 +1,6 @@
 <?php
-function imagepicker($group) {
+function imagepicker($group)
+{
     // Directory where images are stored
     $imageDir = 'assets/img/skelby/' . $group . '/thumbnails/';
 
@@ -14,7 +15,7 @@ function imagepicker($group) {
         $filename = basename($randomImage);
 
         // Display the image
-        echo "<img class='img-front' src='$randomImage' alt='Random image from gallery: $filename' />";
+        echo "<img class='img-front' loading='lazy' src='$randomImage' alt='Random image from gallery: $filename' />";
     } else {
         echo "No images found in the directory.";
     }

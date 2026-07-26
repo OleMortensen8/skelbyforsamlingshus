@@ -184,7 +184,7 @@ class EventManager
 
             $imageSrc = trim((string)$arrangement->image);
             if ($imageSrc !== '') {
-                $text .= "<div class='arrangement-image'><img src='" . htmlspecialchars($imageSrc, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "' alt='" . htmlspecialchars((string)$arrangement->title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "'></div>";
+                $text .= "<div class='arrangement-image'><img loading='lazy' src='" . htmlspecialchars($imageSrc, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "' alt='" . htmlspecialchars((string)$arrangement->title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "'></div>";
             }
 
             $text .= "<div class='arrangement-body'>";
