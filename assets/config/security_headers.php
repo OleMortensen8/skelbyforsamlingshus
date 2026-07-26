@@ -38,15 +38,22 @@ $cspDirectives = [
     "default-src" => "'self'",
     "script-src" => "'self' 'unsafe-inline' 'wasm-unsafe-eval' https://ajax.googleapis.com",
     "worker-src" => "'self' blob:",
-    "style-src" => "'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "style-src" => "'self' 'unsafe-inline'",
     "img-src" => "'self' data: https://www.openstreetmap.org https://*.tile.openstreetmap.org https://" . ($_SERVER['HTTP_HOST'] ?? 'skelby-forsamlingshus.dk'),
-    "font-src" => "'self' https://fonts.gstatic.com",
+    "font-src" => "'self'",
     "connect-src" => "'self' https://*.tile.openstreetmap.org" . $capConnectSrc,
     "frame-src" => "'self' https://www.openstreetmap.org https://sway.office.com https://sway.cloud.microsoft",
     "object-src" => "'none'",
     "base-uri" => "'self'",
     "form-action" => "'self'",
-    "frame-ancestors" => "'self'"
+    "frame-ancestors" => "'self'",
+    // Send CSP violation reports to a local logging endpoint so real-world
+    // violations can be caught in production instead of relying only on
+    // manual testing. report-to is the modern replacement for report-uri;
+    // both are sent since browser support for report-to's Reporting-Endpoints
+    // header is still inconsistent.
+    "report-uri" => "/csp-report.php",
+    "report-to" => "csp-endpoint"
 ];
 
 // Only add upgrade-insecure-requests in production environments
@@ -70,6 +77,16 @@ foreach ($cspDirectives as $directive => $value) {
 
 // Set Content Security Policy header
 header("Content-Security-Policy: " . trim($cspValue));
+
+// Register the "csp-endpoint" group referenced by the CSP's report-to
+// directive above (modern Reporting API). Report-To is the legacy header
+// form still needed for browsers that don't yet support Reporting-Endpoints.
+header('Reporting-Endpoints: csp-endpoint="/csp-report.php"');
+header('Report-To: ' . json_encode([
+    'group' => 'csp-endpoint',
+    'max_age' => 10886400,
+    'endpoints' => [['url' => '/csp-report.php']]
+]));
 
 // X-Content-Type-Options
 // Prevents browsers from MIME-sniffing a response away from the declared content-type

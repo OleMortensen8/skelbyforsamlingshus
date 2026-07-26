@@ -10,8 +10,6 @@
   "require-dev": {
         "phpunit/phpunit": "^10",
     "codedungeon/phpunit-result-printer": "^0.31.0",
-    "codeception/codeception": "^5.0",
-    "codeception/module-webdriver": "^3.2",
     "phpunit/php-code-coverage": "^10.0"
     },
   "scripts": {

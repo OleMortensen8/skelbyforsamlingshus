@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: skelby_dev
+          MYSQL_USER: skelby
+          MYSQL_PASSWORD: skelby_dev_pass
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      HOST: 127.0.0.1
+      DATABASE: skelby_dev
+      USERNAME: skelby
+      PASSWORD: skelby_dev_pass
+      ENVIRONMENT: development
+      MAIL_HOST: localhost
+      MAIL_PORT: 1025
+      MAIL_USERNAME: test
+      MAIL_PASSWORD: test
+      MAIL_FROM: test@localhost
+      MAIL_FROM_NAME: "Skelby CI"
+      ADMIN_EMAIL: test@localhost
+      MAIL_REPLY_TO: test@localhost
+      MAIL_BCC_SECRETARY: ""
+      MAIL_BCC_DEV: ""
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: pdo_mysql, curl, mbstring, xml
+          coverage: none
+
+      - name: Validate composer.json
+        run: composer validate --no-check-publish
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Lint PHP files
+        run: |
+          set -e
+          find . \
+            -path ./vendor -prune -o \
+            -name '*.php' -print \
+            | xargs -n1 php -l
+
+      - name: Load database schema
+        run: |
+          mysql -h127.0.0.1 -uskelby -pskelby_dev_pass skelby_dev < assets/sql/create_users_table.sql
+          mysql -h127.0.0.1 -uskelby -pskelby_dev_pass skelby_dev < docker/initdb/01_customers_bookings.sql
+
+      - name: Run test suite
+        run: composer test

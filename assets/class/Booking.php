@@ -1,4 +1,5 @@
 <?php
+
 namespace App;
 
 use PDO;
@@ -6,7 +7,8 @@ use Exception;
 use DateTime;
 use DateInterval;
 
-class Booking extends Database {
+class Booking extends Database
+{
     private $customer = null;
 
     public function __construct(Customer $customer = null)
@@ -73,6 +75,22 @@ class Booking extends Database {
             $stmt->execute($bookingIds);
         } catch (Exception $th) {
             echo $th->getMessage();
+        }
+    }
+
+    // Fetch the customer_id and booking_date for a set of booking IDs, so
+    // callers (e.g. the approve/reject email flow) can look up the customer
+    // and dates *before* the rows are updated/deleted.
+    public function getBookingsByIds(array $bookingIds): array
+    {
+        try {
+            $idPlaceholders = rtrim(str_repeat('?,', count($bookingIds)), ',');
+            $sql = "SELECT booking_id, booking_date, customer_id FROM Bookings WHERE booking_id IN ($idPlaceholders)";
+            $stmt = $this->dbh->prepare($sql);
+            $stmt->execute($bookingIds);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return [];
         }
     }
 

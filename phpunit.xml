@@ -14,6 +14,8 @@
       <file>./tests/EventManagerTest.php</file>
       <file>./tests/StringUtilsTest.php</file>
       <file>./tests/UserTest.php</file>
+      <file>./tests/EnvExampleCompletenessTest.php</file>
+      <file>./tests/MailerHardcodedCredentialFallbackTest.php</file>
     </testsuite>
     <testsuite name="Integration Tests">
       <file>./tests/UserAuthenticationIntegrationTest.php</file>

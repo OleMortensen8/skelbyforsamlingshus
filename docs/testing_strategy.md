@@ -42,15 +42,6 @@ Functional tests ensure that the application functions correctly from a user's p
 - **Coverage Target**: All critical user workflows
 - **Examples**: `BookingWorkflowFunctionalTest.php`, `UserRegistrationLoginWorkflowFunctionalTest.php`
 
-### Browser Tests
-
-Browser tests verify the frontend functionality of the application in a real browser environment.
-
-- **Location**: `tests/browser/` directory
-- **Tools**: PHPUnit with WebDriver, Codeception
-- **Coverage Target**: All key frontend pages and interactions
-- **Examples**: `HomepageBrowserTest.php`, `ArrangementsCest.php`, `LoginCest.php`
-
 ### API Tests
 
 API tests verify that the application's API endpoints function correctly.
@@ -74,7 +65,6 @@ Performance tests ensure the application performs well under load.
 ### Local Development
 
 - Each developer should run unit and integration tests locally before committing code
-- Browser tests can be run locally with Selenium WebDriver and ChromeDriver/GeckoDriver
 
 ### Continuous Integration
 
@@ -116,9 +106,6 @@ vendor/bin/phpunit
 
 # Run a specific test file
 vendor/bin/phpunit tests/BookingTest.php
-
-# Run browser tests
-vendor/bin/phpunit tests/browser
 
 # Run with coverage report
 vendor/bin/phpunit --coverage-html tests/log/report

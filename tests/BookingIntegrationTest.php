@@ -142,14 +142,14 @@ class BookingIntegrationTest extends TestCase
         $output = ob_get_clean();
 
         // Assert that the output contains the form elements
-        $this->assertStringContainsString('<form name="form1" id="form1"', $output);
-        $this->assertStringContainsString('input type="text" name="navnet"', $output);
-        $this->assertStringContainsString('input type="text" name="adresse"', $output);
-        $this->assertStringContainsString('input type="text" name="telefon"', $output);
-        $this->assertStringContainsString('input type="text" name="mail"', $output);
-        $this->assertStringContainsString('input type="hidden" name="sdate"', $output);
-        $this->assertStringContainsString('input type="hidden" name="enddate"', $output);
-        $this->assertStringContainsString('input type="submit" id="sub"', $output);
+        $this->assertStringContainsString('<form id="form1" class="booking-form"', $output);
+        $this->assertStringContainsString('id="navnet" name="navnet"', $output);
+        $this->assertStringContainsString('id="adresse" name="adresse"', $output);
+        $this->assertStringContainsString('type="tel" id="telefon" name="telefon"', $output);
+        $this->assertStringContainsString('type="email" id="mail" name="mail"', $output);
+        $this->assertStringContainsString('id="sdate" type="hidden" name="startdate"', $output);
+        $this->assertStringContainsString('id="enddate" name="enddate" class="form-select"', $output);
+        $this->assertStringContainsString('id="sub" class="submit" type="submit"', $output);
     }
 
     /**

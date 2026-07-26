@@ -56,42 +56,33 @@ if (!empty($errors)) {
 
 $fullName = $name . ' ' . $lastname;
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
+use App\Mailer;
 
-$mail = new PHPMailer;
-$mail->isSMTP();
-$mail->Host = $_ENV['MAIL_HOST'];
-$mail->SMTPAuth = true;
-$mail->Username = $_ENV['MAIL_USERNAME'];
-$mail->Password = $_ENV['MAIL_PASSWORD'];
-$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-$mail->Port = (int)$_ENV['MAIL_PORT'];
-$mail->CharSet = 'UTF-8';
-$mail->isHTML(true);
-$mail->setFrom($_ENV['MAIL_FROM'], $_ENV['MAIL_FROM_NAME']);
-$mail->addReplyTo($_ENV['MAIL_REPLY_TO'] ?? 'kasserer@skelby-forsamlingshus.dk', 'Kasserer');
-$mail->addAddress($_ENV['ADMIN_EMAIL'], 'Bestyrelsesformand');
+try {
+    $adminEmail = getenv('ADMIN_EMAIL');
+    if (!$adminEmail) {
+        throw new \RuntimeException('Missing required ADMIN_EMAIL environment variable; membership notification email not sent.');
+    }
 
-$bccSecretary = $_ENV['MAIL_BCC_SECRETARY'] ?? 'mette@fiskebaek.com';
-if ($bccSecretary !== '') {
-    $mail->addBCC($bccSecretary);
-}
-$bccDev = $_ENV['MAIL_BCC_DEV'] ?? '';
-if ($bccDev !== '') {
-    $mail->addBCC($bccDev);
-}
-$mail->Subject = "Oplysninger til Medlemsskab";
-$mail->Body = '';
-$mail->Body .= '<br/>Nye medlems Navn: ' . $fullName;
-$mail->Body .= '<br/>Nye medlems Adresse: ' . $adresse . ', ';
-$mail->Body .= $postalCode . ', ' . $town;
-$mail->Body .= '<br/>Nye medlems Telefon: ' . $tel;
-$mail->Body .= '<br/>Nye medlems Mail: ' . $email;
+    $mail = Mailer::create();
+    $mail->addAddress($adminEmail, 'Bestyrelsesformand');
+    Mailer::addStandardBcc($mail);
 
-if (!$mail->send()) {
-    error_log('Mail Error: ' . $mail->ErrorInfo);
+    $mail->Subject = "Oplysninger til Medlemsskab";
+    $mail->Body = '';
+    $mail->Body .= '<br/>Nye medlems Navn: ' . $fullName;
+    $mail->Body .= '<br/>Nye medlems Adresse: ' . $adresse . ', ';
+    $mail->Body .= $postalCode . ', ' . $town;
+    $mail->Body .= '<br/>Nye medlems Telefon: ' . $tel;
+    $mail->Body .= '<br/>Nye medlems Mail: ' . $email;
+
+    if (!$mail->send()) {
+        error_log('Mail Error: ' . $mail->ErrorInfo);
+        header("Location: blivMedlem.php?status=error");
+        exit();
+    }
+} catch (\Throwable $e) {
+    error_log('medlem.php Mailer Exception: ' . $e->getMessage());
     header("Location: blivMedlem.php?status=error");
     exit();
 }

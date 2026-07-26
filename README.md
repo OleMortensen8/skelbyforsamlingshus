@@ -39,8 +39,19 @@ This is the repository for the SkelbyForsamlinghus website.
 
 5. Set up the database:
    ```bash
-   mysql -u your_db_username -p your_db_name < assets/sql/schema.sql
+   mysql -u your_db_username -p your_db_name < assets/sql/create_users_table.sql
+   mysql -u your_db_username -p your_db_name < docker/initdb/01_customers_bookings.sql
    ```
+
+## Docker
+
+`docker-compose.yml` / `Dockerfile` are dev-oriented: the `db` service uses
+hardcoded, low-security default credentials (`skelby`/`skelby_dev_pass`,
+root password `secret`) meant only for local development. **Do not reuse
+`docker-compose.yml` as-is in production** — a production deployment should
+use its own compose file (or non-Docker deployment) with real secrets
+supplied via environment variables / a secrets manager, not the defaults
+baked into this file.
 
 ## Testing
 
@@ -140,23 +151,18 @@ Then open `tests/log/report/index.html` in your browser to view the report.
 
 ## CI/CD Pipeline
 
-The project uses GitHub Actions for continuous integration and deployment. The workflow is defined in
-`.github/workflows/ci.yml`.
+The project uses GitHub Actions for continuous integration. The workflow is defined in
+`.github/workflows/ci.yml` and runs on every push to `main` and on pull requests.
 
 ### CI Workflow
 
-The CI workflow runs on every push to the `main` branch and on pull requests. It performs the following steps:
-
-1. Sets up a MySQL database for testing
-2. Sets up PHP 8.0 with necessary extensions
-3. Validates composer.json and composer.lock
+1. Starts a MySQL 8.0 service container for testing
+2. Sets up PHP 8.3 with the extensions the app needs (pdo_mysql, curl, mbstring, xml)
+3. Validates `composer.json`
 4. Installs dependencies
-5. Creates a .env file for testing
-6. Sets up the database schema
-7. Runs unit tests
-8. Runs integration tests
-9. Generates a code coverage report
-10. Uploads the coverage report to Codecov
+5. Lints every PHP file with `php -l`
+6. Loads the database schema (`assets/sql/create_users_table.sql` + `docker/initdb/01_customers_bookings.sql`)
+7. Runs the full test suite via `composer test` (all PHPUnit suites configured in `phpunit.xml`)
 
 ### Setting Up CI/CD
 

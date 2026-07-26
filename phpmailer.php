@@ -1,38 +1,18 @@
 <?php
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
+use App\Mailer;
 
 try {
-    $mailHost = getenv('MAIL_HOST');
-    $mailUsername = getenv('MAIL_USERNAME');
-    $mailPassword = getenv('MAIL_PASSWORD');
-    $mailFrom = getenv('MAIL_FROM');
     $adminEmail = getenv('ADMIN_EMAIL');
 
-    if (!$mailHost || !$mailUsername || !$mailPassword || !$mailFrom || !$adminEmail) {
-        throw new \RuntimeException('Missing required mail configuration environment variable(s) (MAIL_HOST/MAIL_USERNAME/MAIL_PASSWORD/MAIL_FROM/ADMIN_EMAIL); booking notification email not sent.');
+    if (!$adminEmail) {
+        throw new \RuntimeException('Missing required ADMIN_EMAIL environment variable; booking notification email not sent.');
     }
 
-    $mail = new PHPMailer(true);
-    $mail->isSMTP();
-    $mail->Host = $mailHost;
-    $mail->SMTPAuth = true;
-    $mail->Username = $mailUsername;
-    $mail->Password = $mailPassword;
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = (int)(getenv('MAIL_PORT') ?: 587);
-    $mail->CharSet = 'UTF-8';
-    $mail->isHTML(true);
-    $mail->setFrom($mailFrom, getenv('MAIL_FROM_NAME') ?: 'Skelby Forsamlinghus');
-    $mail->addReplyTo(getenv('MAIL_REPLY_TO') ?: 'kasserer@skelby-forsamlingshus.dk', 'Kasserer');
+    $mail = Mailer::create('Skelby Forsamlinghus');
     $mail->addAddress($adminEmail, 'Administrator');
+    Mailer::addSecretaryBcc($mail);
 
-    $bccSecretary = getenv('MAIL_BCC_SECRETARY') ?: 'mette@fiskebaek.com';
-    if ($bccSecretary !== '') {
-        $mail->addBCC($bccSecretary, 'Sekrætær');
-    }
     $mail->Subject = "Oplysninger for henvendelse til udlejning";
 
     $domain = getenv('APP_DOMAIN') ?: 'skelby-forsamlingshus.dk';

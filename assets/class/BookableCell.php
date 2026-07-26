@@ -227,11 +227,25 @@ class BookableCell
                 return;
             }
 
-            // If we get here, either the token is valid or we're allowing the action from an email link
-            $customerId = $this->booking->deleteBooking($bookingIds);
+            // If we get here, either the token is valid or we're allowing the action from an email link.
+            // Look up the affected rows (customer + dates) BEFORE deleting, since
+            // deleteBooking() removes them and we still need this info for the
+            // rejection email.
+            $bookingRows = $this->booking->getBookingsByIds($bookingIds);
+            $this->booking->deleteBooking($bookingIds);
+            $customerId = $bookingRows[0]['customer_id'] ?? null;
             $customer = new Customer();
-            if (!$customer->hasBookings($customerId)) {
+            if ($customerId !== null && !$customer->hasBookings($customerId)) {
+                $customerInfo = $customer->getCustomerById($customerId);
                 $customer->deleteCustomer($customerId);
+                try {
+                    $name = $customerInfo['name'] ?? '';
+                    $email = $customerInfo['email'] ?? '';
+                    $dato = $this->formatBookingDateRange($bookingRows);
+                    include('rejected_mail.php');
+                } catch (\Throwable $mailError) {
+                    error_log('Booking rejection email failed: ' . $mailError->getMessage());
+                }
             }
         }
 
@@ -255,8 +269,38 @@ class BookableCell
             }
 
             // If we get here, either the token is valid or we're allowing the action from an email link
+            $bookingRows = $this->booking->getBookingsByIds($bookingIds);
             $this->booking->approveBooking($bookingIds);
+
+            $customerId = $bookingRows[0]['customer_id'] ?? null;
+            if ($customerId !== null) {
+                $customer = new Customer();
+                $customerInfo = $customer->getCustomerById($customerId);
+                try {
+                    $name = $customerInfo['name'] ?? '';
+                    $email = $customerInfo['email'] ?? '';
+                    $dato = $this->formatBookingDateRange($bookingRows);
+                    include('confirmation_mail.php');
+                } catch (\Throwable $mailError) {
+                    error_log('Booking confirmation email failed: ' . $mailError->getMessage());
+                }
+            }
         }
+    }
+
+    // Format the booking_date(s) of a set of booking rows (as returned by
+    // Booking::getBookingsByIds()) into a human-readable Danish date/range
+    // string for use in the approve/reject notification emails.
+    private function formatBookingDateRange(array $bookingRows): string
+    {
+        $dates = array_column($bookingRows, 'booking_date');
+        if (empty($dates)) {
+            return '';
+        }
+        sort($dates);
+        $first = date('d-m-Y', strtotime($dates[0]));
+        $last = date('d-m-Y', strtotime(end($dates)));
+        return $first === $last ? $first : ($first . ' til ' . $last);
     }
 
     private function openCell($date)

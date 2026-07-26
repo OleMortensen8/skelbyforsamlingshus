@@ -1,24 +1,28 @@
 <?php
+
 namespace App;
 
 use PDO;
 use Exception;
 
-class Customer extends Database {
+class Customer extends Database
+{
     private $name;
     private $email;
     private $customerId;
 
-    public function __construct($name = null, $email = null) {
+    public function __construct($name = null, $email = null)
+    {
         parent::__construct();
-        if (!$name == null || !$email == null){
+        if (!$name == null || !$email == null) {
             $this->name = $name;
             $this->email = $email;
             $this->createOrFetchCustomer();
         }
     }
 
-    private function createOrFetchCustomer() {
+    private function createOrFetchCustomer()
+    {
         // Check if the customer already exists in the database.
         $stmt = $this->dbh->prepare('SELECT customer_id FROM Customers WHERE email = ?');
         $stmt->execute([$this->email]);
@@ -34,25 +38,37 @@ class Customer extends Database {
             $this->customerId = $this->dbh->lastInsertId();
         }
     }
-    public function getCustomerId() {
+    public function getCustomerId()
+    {
         return $this->customerId;
     }
-    public function getCustomerIdFromBooking($bookingId) {
+    public function getCustomerIdFromBooking($bookingId)
+    {
         $sql = 'SELECT customer_id FROM Bookings WHERE booking_id = ?';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$bookingId]);
         $this->customerId = $stmt->fetchColumn();
     }
-    public function hasBookings($customerId) {
+    public function hasBookings($customerId)
+    {
         $sql = 'SELECT COUNT(*) FROM Bookings WHERE customer_id = ?';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$customerId]);
         $return = $stmt->fetchColumn() < 1 ? false : true;
         return $return;
     }
-    public function deleteCustomer($customerId) {
+    public function getCustomerById($customerId)
+    {
+        $sql = 'SELECT name, email FROM Customers WHERE customer_id = ?';
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->execute([$customerId]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ?: null;
+    }
+    public function deleteCustomer($customerId)
+    {
         $sql = 'DELETE FROM Customers WHERE customer_id = ?';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$customerId]);
-    }    
+    }
 }
