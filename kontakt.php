@@ -10,11 +10,6 @@ include "assets/view/header.php";
 
             <div class="contact-info">
                 <div class="contact-section">
-                    <h3>Udlejning</h3>
-                    <p>Tel: <a href="&#x74;&#x65;&#x6c;&#x3a;&#x2b;&#x34;&#x35;&#x32;&#x30;&#x38;&#x33;&#x35;&#x36;&#x34;&#x37;">&#x2b;&#x34;&#x35;&#x20;&#x32;&#x30;&#x20;&#x38;&#x33;&#x20;&#x35;&#x36;&#x20;&#x34;&#x37;</a></p>
-                </div>
-
-                <div class="contact-section">
                     <h3>Regnskab</h3>
                     <p>Tel: <a href="&#x74;&#x65;&#x6c;&#x3a;&#x2b;&#x34;&#x35;&#x32;&#x30;&#x38;&#x33;&#x35;&#x36;&#x34;&#x37;">&#x2b;&#x34;&#x35;&#x20;&#x32;&#x30;&#x20;&#x38;&#x33;&#x20;&#x35;&#x36;&#x20;&#x34;&#x37;</a></p>
                 </div>
@@ -25,9 +20,13 @@ include "assets/view/header.php";
                 </div>
 
                 <div class="address-section">
-                    <h3>Adresse</h3>
-                    <p>Gl. Landevej 66<br>4874 Gedser</p>
+                    <div class="address-text">
+                        <h3>Adresse</h3>
+                        <p>Gl. Landevej 66<br>4874 Gedser</p>
+                    </div>
+                    <iframe class="address-map" title="Kort over Skelby Forsamlingshus" src="https://www.openstreetmap.org/export/embed.html?bbox=11.892968416213991%2C54.63258619607408%2C11.910885572433473%2C54.63779608414236&amp;layer=mapnik&amp;marker=54.63519122354269%2C11.90192699432373" style="border: 1px solid black"></iframe>
                 </div>
+
             </div>
         </div>
     </div>
