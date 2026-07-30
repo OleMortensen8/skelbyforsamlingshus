@@ -12,7 +12,7 @@
 			"addressLocality" => "Gedser",
 			"addressCountry" => "DK"
 		],
-		"telephone" => "+4522143669",
+		"telephone" => "+4520835647",
 		"url" => "https://skelby-forsamlingshus.dk/"
 	], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>
 </script>
@@ -35,7 +35,7 @@
 			<div style="width:73%;text-align:center; margin:auto;margin-left: 66px;">
 				<p style="font-size: 16px; line-height: 1.5;"><b>Forsamlingshus i Skelby</b><br>
 				<address style="font-style: normal;">Gl. Landevej 66, 4874 Gedser</address>
-				<a class="subtle-link" href="&#x74;&#x65;&#x6c;&#x3a;&#x2b;&#x34;&#x35;&#x32;&#x32;&#x31;&#x34;&#x33;&#x36;&#x36;&#x39;">&#x2b;&#x34;&#x35;&#x20;&#x32;&#x32;&#x31;&#x34;&#x33;&#x36;&#x36;&#x39;</a>
+				<a class="subtle-link" href="&#x74;&#x65;&#x6c;&#x3a;&#x2b;&#x34;&#x35;&#x32;&#x30;&#x38;&#x33;&#x35;&#x36;&#x34;&#x37;">&#x2b;&#x34;&#x35;&#x20;&#x32;&#x30;&#x20;&#x38;&#x33;&#x20;&#x35;&#x36;&#x20;&#x34;&#x37;</a>
 				</p>
 			</div>
 
