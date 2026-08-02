@@ -202,4 +202,41 @@ class EventManager
         }
         return $text;
     }
+
+    /**
+     * Same rendering as getArangementer(), but sourced from a plain array of
+     * occurrences (e.g. from UniooEventSync::fetchUpcomingEventOccurrences())
+     * instead of the arrangementer.xml SimpleXMLElement.
+     *
+     * @param array<int, array{title: string, date: string, time: string, location: string, description: string, image?: string}> $occurrences
+     */
+    public function getArangementerFromArray(array $occurrences): string
+    {
+        if (empty($occurrences)) {
+            return "<h2>Arrangementsliste forberedes...</h2>";
+        }
+
+        $text = "";
+        foreach ($occurrences as $arrangement) {
+            $text .= "<div class='arrangement'>";
+
+            $imageSrc = trim((string)($arrangement['image'] ?? ''));
+            if ($imageSrc !== '') {
+                $text .= "<div class='arrangement-image'><img loading='lazy' src='" . htmlspecialchars($imageSrc, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "' alt='" . htmlspecialchars($arrangement['title'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "'></div>";
+            }
+
+            $text .= "<div class='arrangement-body'>";
+            $text .= "<h2>" . htmlspecialchars($arrangement['title'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "</h2>";
+            $text .= "<h3>Dato: " . htmlspecialchars($arrangement['date'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "</h3>";
+            $text .= "<h3>Tid: " . htmlspecialchars($arrangement['time'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "</h3>";
+            $text .= "<h3>Stedet: " . htmlspecialchars($arrangement['location'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . "</h3>";
+
+            $text .= "<h3>Beskrivelse:</h3>";
+            $text .= "<div style='font-weight:bold;' class='beskrivelse'>" . $this->descriptionToHtml($arrangement['description']) . "</div>";
+            $text .= "</div>";
+
+            $text .= "</div><hr>";
+        }
+        return $text;
+    }
 }

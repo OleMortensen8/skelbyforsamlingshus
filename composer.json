@@ -19,5 +19,8 @@
     "post-autoload-dump": [
         "echo 'Note: App\\\\ namespace is mapped to assets/class/ in composer.json'"
     ]
+  },
+  "require": {
+    "vlucas/phpdotenv": "^5.6"
   }
 }

@@ -20,10 +20,8 @@ spl_autoload_register(function ($class) {
 use App\EventManager;
 
 // Load environment variables (before security headers, so CSP can reference them)
-if (file_exists(__DIR__ . '/.env')) {
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-    $dotenv->load();
-}
+require_once __DIR__ . '/assets/config/dotenv_bootstrap.php';
+loadDotenvWithPutenvFallback(__DIR__);
 
 // Set security headers
 include "assets/config/security_headers.php";

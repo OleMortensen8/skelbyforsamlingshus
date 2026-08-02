@@ -3,10 +3,8 @@ date_default_timezone_set('Europe/Copenhagen');
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-if (file_exists(__DIR__ . '/.env')) {
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-    $dotenv->load();
-}
+require_once __DIR__ . '/assets/config/dotenv_bootstrap.php';
+loadDotenvWithPutenvFallback(__DIR__);
 
 $host = getenv('HOST');
 $db = getenv('DATABASE');
@@ -67,7 +65,8 @@ try {
             error_log("Outdated event detected: Title='$title', Date='$booking_date_str'");
 
 
-            $deleteBookingStmt = $pdo->prepare("
+            $deleteBookingStmt = $pdo->prepare(
+                "
                 DELETE FROM skelby_forsamlingshus_dk_db.Bookings
                 WHERE booking_date = :booking_date
                 AND customer_id = (SELECT customer_id FROM skelby_forsamlingshus_dk_db.Customers WHERE name = :name LIMIT 1)"
@@ -83,7 +82,8 @@ try {
             }
 
 
-            $checkCustomerStmt = $pdo->prepare("
+            $checkCustomerStmt = $pdo->prepare(
+                "
                 SELECT COUNT(*) FROM skelby_forsamlingshus_dk_db.Bookings
                 WHERE customer_id = (SELECT customer_id FROM skelby_forsamlingshus_dk_db.Customers WHERE name = :name LIMIT 1)"
             );
@@ -124,7 +124,8 @@ try {
         }
 
 
-        $bookingStmt = $pdo->prepare("
+        $bookingStmt = $pdo->prepare(
+            "
             SELECT COUNT(*) FROM skelby_forsamlingshus_dk_db.Bookings
             WHERE customer_id = :customer_id
             AND booking_date = :booking_date"
@@ -137,7 +138,8 @@ try {
         if ($bookingStmt->fetchColumn() == 0) {
 
             try {
-                $insertBookingStmt = $pdo->prepare("
+                $insertBookingStmt = $pdo->prepare(
+                    "
                     INSERT INTO skelby_forsamlingshus_dk_db.Bookings (customer_id, booking_date, approved)
                     VALUES (:customer_id, :booking_date, 1)"
                 );
